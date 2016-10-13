@@ -42,15 +42,11 @@ tags:  JavaScript PHP UEditor
 这主要是由于：不能创建editor之后马上使用ueditor.setContent('文本内容');
 要等到创建完成之后才可以使用
 这时候我们需要将写入代码改为：
+
 ```js
-        UE.getEditor('container').addListener("ready", function () {
+    UE.getEditor('container').addListener("ready", function () {
             // editor准备好之后才可以使用
             UE.getEditor('container').setContent('abc');
+
         });
 ```
-
-
-
-
-
-
