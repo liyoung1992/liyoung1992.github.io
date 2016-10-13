@@ -50,12 +50,10 @@ func main() {
 
 
 ```
+   2.并发情况下的单例模式
 
 
-  2. 并发情况下的单例模式
-
-
-并发情况下，上面的代码并不能保证只创建一个实例（当在并发的情况下，当第一个goroutine执行到m = &Manager{name: name}之前，第二个goroutine也正好获取实例，此时判断m是否为空，因为m = &Manager{name: name}还未执行，m为非空，这时候代码就要执行了两次），为了解决这个问题，我们引入go的锁机制。
+  并发情况下，上面的代码并不能保证只创建一个实例（当在并发的情况下，当第一个goroutine执行到m = &Manager{name: name}之前，第二个goroutine也正好获取实例，此时判断m是否为空，因为m = &Manager{name: name}还未执行，m为非空，这时候代码就要执行了两次），为了解决这个问题，我们引入go的锁机制。
 
 ```go
 // Singleton project main.go
@@ -98,7 +96,7 @@ func main() {
 
 ```
 
-3. go专属的单例模式
+  3.go专属的单例模式
 
 因为单例模式之创建一个实例，go中sync.Once中有个Do方法，可以保证代码只被执行一次！！！
 
