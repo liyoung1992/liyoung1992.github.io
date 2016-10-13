@@ -43,7 +43,7 @@ tags:  JavaScript PHP UEditor
 要等到创建完成之后才可以使用
 这时候我们需要将写入代码改为：
 ```js
-$(function(){
+    $(function(){
         UE.getEditor('container').addListener("ready", function () {
             // editor准备好之后才可以使用
             UE.getEditor('container').setContent('abc');
