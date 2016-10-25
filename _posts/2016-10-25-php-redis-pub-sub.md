@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "php-redis发布/订阅"
-categories: php
-tags:  php redis
+categories: PHP
+tags:  PHP redis
 ---
 
 * content
