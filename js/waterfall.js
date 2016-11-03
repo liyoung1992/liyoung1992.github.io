@@ -14,10 +14,10 @@
      */
     var demoContent = [
 	{
-        demo_link: 'https://github.com/liyoung1992/demo',
-        img_link: 'https://ooo.0o0.ooo/2016/06/20/5768c1597d1fe.png',
-        code_link: 'https://github.com/liyoung1992/demo/blob/master/buttonStyle.html',
-        title: 'button样式',
+        demo_link: 'https://github.com/liyoung1992/demo/buttonStyle/',
+        img_link: 'http://dl.iteye.com/upload/attachment/0066/3255/35dc5cfc-b795-3973-adeb-c42362b473e6.jpg',
+        code_link: 'https://github.com/liyoung1992/demo/tree/master/buttonStyle',
+        title: '漂亮的button样式',
         core_tech: 'Button Css',
         description: 'button样式，可以直接html，css，直接用；'
     },
