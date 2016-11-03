@@ -14,7 +14,7 @@
      */
     var demoContent = [
 	{
-        demo_link: 'http://liyoung1992.github.io/Demo/buttonStyle/',
+        demo_link: 'http://htmlpreview.github.io/?https://github.com/liyoung1992/demos/blob/master/buttonStyle/index.html',
         img_link: 'http://dl.iteye.com/upload/attachment/0066/3255/35dc5cfc-b795-3973-adeb-c42362b473e6.jpg',
         code_link: 'https://github.com/liyoung1992/demo/tree/master/buttonStyle',
         title: '漂亮的button样式',
