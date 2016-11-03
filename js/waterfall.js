@@ -12,7 +12,16 @@
     /**
      * 内容JSON
      */
-    var demoContent = [{
+    var demoContent = [
+	{
+        demo_link: 'https://github.com/liyoung1992/demo',
+        img_link: 'https://ooo.0o0.ooo/2016/06/20/5768c1597d1fe.png',
+        code_link: 'https://github.com/liyoung1992/demo/blob/master/buttonStyle.html',
+        title: 'button样式',
+        core_tech: 'Button Css',
+        description: 'button样式，可以直接html，css，直接用；'
+    }
+	{
         demo_link: 'http://gaohaoyang.github.io/test/headerTransition/',
         img_link: 'https://ooo.0o0.ooo/2016/06/20/5768c1597d1fe.png',
         code_link: 'https://github.com/Gaohaoyang/test/tree/master/headerTransition',
