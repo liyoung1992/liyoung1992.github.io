@@ -3,13 +3,19 @@ layout: post
 title:  "php处理发送post或者get请求"
 categories: php
 tags:  php curl
+
 ---
 
 * content
 {:toc}
 
+
 php处理发送post或者get请求，写api接口时候用到。
+
+
 <!--excerpt-->
+
+
 ## 代码
 ```php
     public function get_url_contents($apiId, $data, $method="post", $data_type='json',     $timeout=60)
