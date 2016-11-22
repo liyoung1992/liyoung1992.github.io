@@ -1,0 +1,48 @@
+---
+layout: post
+title:  "php处理发送post或者get请求"
+categories: php
+tags:  php curl
+---
+
+* content
+{:toc}
+
+php处理发送post或者get请求，写api接口时候用到。
+<!--excerpt-->
+## 代码
+```php
+    public function get_url_contents($apiId, $data, $method="post", $data_type='json',     $timeout=60)
+    {
+        //获取apiId对应的url
+        $url = Yii::$app->params['local_url'].Yii::$app->params['api_list']
+        $ch = curl_init();
+        if('get' == strtolower($method)){
+            $url = is_array($data) ? $url.'?'.http_build_query($data) : $url . '?' .$data ;
+            curl_setopt($ch, CURLOPT_URL, $url);
+        }else {
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json","charset=UTF-8"));
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        }
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout) ;
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Return the transfer as a string
+
+        $output = curl_exec($ch);
+
+        if($data_type == 'var_export') {
+            $result = '' ;
+            @eval("\$result=$output;");
+            return $result ;
+        }
+        else
+        {
+            return $output ;
+        }
+    }
+```
+
+
+
