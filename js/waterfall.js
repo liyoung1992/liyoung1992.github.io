@@ -8,11 +8,18 @@
  * @return {[type]}           [description]
  */
 (function() {
-
     /**
      * 内容JSON
      */
     var demoContent = [
+	{
+        demo_link: 'http://htmlpreview.github.io/?https://github.com/liyoung1992/demos/blob/master/pagination/index.html',
+        img_link: 'http://pic002.cnblogs.com/images/2012/91790/2012101209581851.jpg',
+        code_link: 'https://github.com/liyoung1992/demos/tree/master/pagination',
+        title: '自定义的分页插件',
+        core_tech: 'jQuery pagination',
+        description: '自己写的分页插件，支持一个页面多个分页，支持ajax请求'
+    },
 	{
         demo_link: 'http://htmlpreview.github.io/?https://github.com/liyoung1992/demos/blob/master/buttonStyle/index.html',
         img_link: 'http://dl.iteye.com/upload/attachment/0066/3255/35dc5cfc-b795-3973-adeb-c42362b473e6.jpg',
