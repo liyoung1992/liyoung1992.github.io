@@ -5,7 +5,6 @@ categories: go
 tags:  go beego
 ---
 
-
 * content
 {:toc}
 
