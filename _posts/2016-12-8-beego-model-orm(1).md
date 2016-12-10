@@ -1,4 +1,4 @@
- ---
+---
 layout: post
 title:  "beego-模型（models）-初认orm"
 categories: go
