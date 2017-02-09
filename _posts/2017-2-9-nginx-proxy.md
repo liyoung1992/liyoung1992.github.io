@@ -72,12 +72,6 @@ http {
        server 192.168.154.133:80;
        server 192.168.154.134:80;
     }
- #gzip  on;
-    upstream 192.168.154.131 {
-       server 192.168.154.132:80;
-       server 192.168.154.133:80;
-       server 192.168.154.134:80;
-    }
     server {
         listen       80;
         server_name  localhost;
