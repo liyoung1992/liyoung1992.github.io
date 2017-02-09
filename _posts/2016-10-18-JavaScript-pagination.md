@@ -288,6 +288,6 @@ function on_skip_olick(total_page){
 
 3.效果图
 分页的最终效果图如下：
- ![分页.jpg](https://github.com/liyoung1992/liyoung1992.github.io/blob/master/_posts/%E5%88%86%E9%A1%B5.jpg)
+ ![分页.jpg](https://raw.githubusercontent.com/liyoung1992/liyoung1992.github.io/master/_posts/%E5%88%86%E9%A1%B5.jpg)
 
 
