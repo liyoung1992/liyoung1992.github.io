@@ -9,7 +9,7 @@ tags:  php Yii2
 * content
 {:toc}
 
-	在我们开发网站的过程，用户的登录，注册，密码忘记和修改等想通的操作基本都会涉及，在Yii框架中，Yii2-user提供了这方法，下面详细介绍Yii2-user的安装和使用。
+在我们开发网站的过程，用户的登录，注册，密码忘记和修改等想通的操作基本都会涉及，在Yii框架中，Yii2-user提供了这方法，下面详细介绍Yii2-user的安装和使用。
 
 <!--excerpt-->
 
@@ -170,7 +170,7 @@ tags:  php Yii2
 `$ php yii migrate/up --migrationPath=@vendor/dektrium/yii2-user/migrations`
 
 #### 5.开始使用Yii2-user
-以上配置好后，我们就可以使用Yii2-user的丰富功能了，yii2-user主要提供如下功能：
+以上配置好后，我们就可以使用Yii2-user的丰富功能了，Yii2-user主要提供如下功能：
 
 - /user/registration/register 用户注册
 - /user/registration/resend 重新发送邮件
