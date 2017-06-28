@@ -2,7 +2,7 @@
 layout: post
 title:  "如何在项目中使用富文本编辑器UEditor"
 categories: JavaScript
-tags:  JavaScript PHP UEditor
+tags:  JavaScript php UEditor
 ---
 
 * content
