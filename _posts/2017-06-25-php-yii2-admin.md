@@ -2,7 +2,7 @@
 layout: post
 title:  "基于Yii2的后台权限管理（RABC）Yii2-admin使用详解"
 categories: php
-tags:  php yii2
+tags:  php Yii2
 ---
 
 
