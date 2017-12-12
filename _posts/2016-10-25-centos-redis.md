@@ -8,6 +8,7 @@ tags:  linux redis
 * content
 {:toc}
 CentOS6.5下安装redis
+2017年12月注：我们安装好的虚拟机其他主机可能访问不了，这时候就要进入redis配置文件，注释bind 127.0.0.1这个选项！
 <!--excerpt-->
 
 ## 安装方法
