@@ -62,6 +62,7 @@ hello 三角形
 
 ## hello 三角形
 
+![效果图](https://raw.githubusercontent.com/liyoung1992/liyoung1992.github.io/master/image/opengl_01_01.png)
 - triangle_wgt.h
 
 ```cpp
