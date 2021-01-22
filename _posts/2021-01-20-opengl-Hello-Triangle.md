@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "hello 三角形"
+title:  "OpenGL-01-hello 三角形"
 categories: opengl
 tags:  Qt C++
 ---
