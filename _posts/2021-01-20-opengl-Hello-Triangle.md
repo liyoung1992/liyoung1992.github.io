@@ -59,3 +59,148 @@ hello 三角形
 用来计算像素的最终颜色，光照、阴影、颜色等效果都是片段着色器实现的。**OpenGL中的一个片段是OpenGL渲染一个像素所需的所有数据。**
 - 测试与混合
 检测片段的深度，决定是否丢弃被遮挡的像素。同时检查alpha值（alpha值定义了一个物体的透明度）并对物体进行混合(Blend)。所以，即使在片段着色器中计算出来了一个像素输出的颜色，在渲染多个三角形的时候最后的像素颜色也可能完全不同。
+
+## hello 三角形
+
+
+```triangle_wgt.h
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions_3_3_Core>
+#include <iostream>
+#include <QVector>
+class triangle_wgt : public QOpenGLWidget
+{
+	Q_OBJECT
+
+public:
+	triangle_wgt();
+	~triangle_wgt();
+protected:
+	virtual void initializeGL() override;
+	virtual void resizeGL(int w, int h) override;
+	virtual void paintGL() override;
+
+private:
+	GLuint shader_program_;
+	QOpenGLFunctions_3_3_Core*  core_;
+	GLuint VBO, VAO;
+
+	QVector<GLfloat> verties_;
+};
+```
+
+```triangle_wgt.cpp
+
+#include "triangle_wgt.h"
+#include <QDebug>
+const char* vertexShaderSource = 
+		"#version 330 core\n"
+		"layout(location = 0) in vec3 aPos;\n"
+		"void main(){\n"
+		"  gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"}\n\0";
+const char* fragmentShaderSource =
+		"#version 330 core\n"
+		"out vec4 FragColor;\n"
+		"void main(){\n"
+		"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+		"}\n\0";
+
+
+triangle_wgt::triangle_wgt()
+	: QOpenGLWidget()
+{
+	this->setGeometry(QRect(100,100,800,600));
+}
+
+triangle_wgt::~triangle_wgt()
+{
+}
+
+void triangle_wgt::initializeGL() {
+
+	core_ = QOpenGLContext::currentContext()
+		->versionFunctions<QOpenGLFunctions_3_3_Core>();
+
+	// 顶点着色器 -------------------------------------
+	//创建着色器对象
+	auto vert_shader = core_->glCreateShader(GL_VERTEX_SHADER);
+	//把着色器源码附加到着色器对象
+	core_->glShaderSource(vert_shader, 1, &vertexShaderSource, NULL);
+	//编译
+	core_->glCompileShader(vert_shader);
+
+	//检测编译是否成功
+	int success;
+	char info_log[512];
+	core_->glGetShaderiv(vert_shader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		core_->glGetShaderInfoLog(vert_shader, 512, NULL, info_log);
+		qDebug() << "shader complie error:" << info_log;
+	}
+	// 片段着色器 -------------------------------------
+
+	auto frag_shader = core_->glCreateShader(GL_FRAGMENT_SHADER);
+	//把着色器源码附加到着色器对象
+	core_->glShaderSource(frag_shader, 1, &fragmentShaderSource, NULL);
+	//编译
+	core_->glCompileShader(frag_shader);
+
+	core_->glGetShaderiv(frag_shader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		core_->glGetShaderInfoLog(frag_shader, 512, NULL, info_log);
+		qDebug() << "shader complie error:" << info_log;
+	}
+	// 着色器程序
+	shader_program_ = core_->glCreateProgram();
+	core_->glAttachShader(shader_program_, vert_shader);
+	core_->glAttachShader(shader_program_, frag_shader);
+	core_->glLinkProgram(shader_program_);
+	core_->glGetShaderiv(shader_program_, GL_LINK_STATUS, &success);
+	if (!success) {
+		core_->glGetShaderInfoLog(shader_program_, 512, NULL, info_log);
+		qDebug() << "shader program error:" << info_log;
+	}
+	core_->glDeleteShader(vert_shader);
+	core_->glDeleteShader(frag_shader);
+
+	verties_.clear();
+	verties_ << -0.5f << -0.5f << 0.0f;
+	verties_ << 0.5f << -0.5f << 0.0f;
+	verties_ << 0.0f << 0.5f << 0.0f;
+
+	//生产1个顶点VAO对象
+	core_->glGenVertexArrays(1, &VAO);
+	//vbo
+	core_->glGenBuffers(1, &VBO);
+	//绑定vao
+	core_->glBindVertexArray(VAO);
+	//开始复制顶点数据到opengl
+	core_->glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	core_->glBufferData(GL_ARRAY_BUFFER, verties_.count()*sizeof(GLfloat),
+		verties_.data(), GL_STATIC_DRAW);
+
+	core_->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	core_->glEnableVertexAttribArray(0);
+
+	//解绑定
+	core_->glBindBuffer(GL_ARRAY_BUFFER, 0);
+	core_->glBindVertexArray(0);
+}
+
+void triangle_wgt::resizeGL(int w, int h) {
+
+	core_->glViewport(0, 0, w, h);
+}
+
+void triangle_wgt::paintGL() {
+	core_->glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	core_->glClear(GL_COLOR_BUFFER_BIT);
+
+	core_->glUseProgram(shader_program_);
+	core_->glBindVertexArray(VAO);
+	core_->glDrawArrays(GL_TRIANGLES, 0, 3);
+	core_->glUseProgram(0);
+}
+```
