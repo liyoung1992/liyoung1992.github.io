@@ -62,8 +62,9 @@ hello 三角形
 
 ## hello 三角形
 
+- triangle_wgt.h
 
-```triangle_wgt.h
+```cpp
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 #include <iostream>
@@ -88,8 +89,9 @@ private:
 	QVector<GLfloat> verties_;
 };
 ```
+-triangle_wgt.cpp
 
-```triangle_wgt.cpp
+```cpp
 
 #include "triangle_wgt.h"
 #include <QDebug>
