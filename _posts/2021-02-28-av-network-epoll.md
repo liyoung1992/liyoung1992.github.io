@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "音视频-01-网络编程-TCP服务端/客户端（c++面向对象版本）"
+title:  "音视频-03-网络编程-基于epoll服务器/客户端"
 categories: webrtc
 tags:  webrtc C++ 网络编程
 ---
@@ -14,7 +14,7 @@ tags:  webrtc C++ 网络编程
 <!--excerpt-->
 
 ## 概述
-网络编程基础（TCP server /client），server基于C++面向对象版本.
+网络编程基础（TCP server /client），基于epoll.
 
 ## 服务端
 
@@ -25,6 +25,13 @@ tags:  webrtc C++ 网络编程
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string.h>
+#include <fcntl.h>
+#include <sys/epoll.h>
+#include <sys/wait.h>
+#define MAX_EVENTS 20
+#define FD_SIZE 1024
+#define TIMEOUT 500
+#define MAX_PROCESS 4
 class TCPServer
 {
 public:
@@ -47,11 +54,16 @@ public:
                        based byte streams.  An out-of-band data transmis‐
                        sion mechanism may be supported. 
     */
+        // int events = 0;
+        // int max_fd = -1;
         socket_fd = socket(PF_INET,SOCK_STREAM,0);
         if (socket_fd == -1) {
             std::cout << "failed to create socket" << std::endl;
             return false;
         }
+        auto flags = fcntl(socket_fd,F_GETFL,0);
+        fcntl(socket_fd,F_SETFL,flags | O_NONBLOCK);
+
         //opt 
         auto ret = setsockopt(socket_fd,
                     SOL_SOCKET,SO_REUSEADDR,
@@ -79,24 +91,83 @@ public:
             std::cout << "listen error" <<std::endl;
             return false;
         }
-        while(1) {
-            socklen_t addr_len = sizeof(struct socketaddr*);
-            accept_fd = accept(socket_fd,
-                (struct sockaddr*) &remoteaddr,&addr_len);
-            while(1) {
-               // std::cout << "----------------" << std::endl;
-                ret = recv(accept_fd,(void *)in_buff,message_len,0);
-              //  std::cout << "ret:" << ret << "  in_buff:" << std::endl;
-                if (ret == 0) {
-                    break;
-                }
-                std::cout << "recv :" << in_buff << std::endl;
-                send(accept_fd,(void*)in_buff,message_len,0);
+        int epoll_fd;
+
+        struct epoll_event ev, events[MAX_EVENTS];
+        int event_number;
+        pid_t pid = -1;
+        for (int i = 0; i < MAX_PROCESS;i++) {
+            if (pid != 0) {
+                pid = fork();
             }
-            close(accept_fd);
         }
+        if (pid == 0)
+        {
+            epoll_fd = epoll_create(256);
+            ev.events = EPOLLIN;
+            ev.data.fd = socket_fd;
+            epoll_ctl(epoll_fd,EPOLL_CTL_ADD,socket_fd,&ev);
+
+        while (1)
+        {
+            event_number = epoll_wait(epoll_fd,events,
+                                MAX_EVENTS,TIMEOUT);
+            for (size_t i = 0; i < event_number; i++)
+            {
+                if (events[i].data.fd == socket_fd) {
+                    socklen_t addr_len = sizeof(struct socketaddr*);
+                    accept_fd = accept(socket_fd,
+                     (struct sockaddr*) &remoteaddr,&addr_len);
+
+                    //set socket sysn
+                    auto flags = fcntl(accept_fd,F_GETFL,0);
+                    fcntl(accept_fd,F_SETFL,flags | O_NONBLOCK);
+
+                    ev.events = EPOLLIN | EPOLLET;
+                    ev.data.fd = accept_fd;
+                    epoll_ctl(epoll_fd,EPOLL_CTL_ADD,accept_fd,&ev);
+                    
+                }else if (events[i].events && EPOLLIN) {
+                    do
+                    {
+                        memset(in_buff, 0, message_len);
+                        ret = recv(events[i].data.fd, (void *)in_buff, message_len, 0);
+                        std::cout << "ret:" << ret << "  in_buff:" << std::endl;
+                        if (ret == 0)
+                        {
+                            close(events[i].data.fd);
+                        }
+                        if (ret == message_len) {
+                            std::cout << "data full" << std::endl;
+                        }
+                        // std::cout << "recv :" << in_buff << std::endl;
+                        // send(events[i].data.fd,(void*)in_buff,message_len,0);
+          
+                    } while (ret < -1&& errno == EINTR);
+                    if (ret < 0) {
+                        switch (errno)
+                        {
+                        case EAGAIN:
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                    if (ret > 0) {
+                        std::cout << "receive message:" << in_buff << std::endl;
+                        send(events[i].data.fd,(void*)in_buff,message_len,0);
+                    }
+                }
+            }
+        }
+       
         close(socket_fd);
-        //return true;
+        }
+        else {//pid != 0
+            do {
+                pid = waitpid(-1,NULL,0);
+            } while (pid != -1);
+         }
     }
 private:
     int socket_fd;
